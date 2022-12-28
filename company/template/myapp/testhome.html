@@ -1,0 +1,125 @@
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+
+
+  <title>Esso Fruits Shop</title>
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm bg-light navbar-back">
+  <a class="navbar-brand" href="/" style="color:black;">Benjauniform</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav mr-auto">
+
+                  <li class="nav-item">
+                     <a class="nav-link" href="{% url 'about-page' %}" style="color:black;">เกี่ยวกับเรา</a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="{% url 'contact-page' %}" style="color:black;">ติดต่อเรา </a>
+                  </li>
+                  <li class="nav-item">
+                     <a class="nav-link" href="{% url 'allproduct-page' %}" style="color:black;">สินค้าทั้งหมด ({% show_addproduct %})</a>
+                  </li>
+
+                  <li class="nav-item dropdown">
+                    <a  class="nav-link dropdown-toggle" href="#" id='dropdown01' data-toggle='dropdown' aria-haspopup='true' aria-expanded = 'false' style="color:black;">ประเภทสินค้า</a>
+                     <div class="dropdown-menu" aria-labelledby='dropdown01'>
+                          
+                          {% all_category %}
+                       
+
+                       
+                     </div>
+                    
+
+                  </li>
+
+                
+
+
+
+                  {% if user.is_authenticated and user.profile.usertype == 'member' %}
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mycart-page' %}" style="color:black;">ตระกร้า <span class="badge badge-pill badge-primary">{{user.profile.cartquan}}</span></a> 
+                        <li class="nav-item">
+                          <a class="nav-link" href="{% url 'orderlist-page' %}" style="color:black;">รายการสั่งซื้อ</a>
+                        </li>
+                      </li>  
+                   {% endif %}  
+
+                   
+                    {% if user.is_authenticated and user.profile.usertype == 'admin' %}
+                    <li class="nav-item">
+
+                         <a class="nav-link" href="{% url 'addproduct-page' %}" style="color:black;">เพิ่มสินค้า </a>
+                    </li>
+                    <li class="nav-item">
+
+                         <a class="nav-link" href="{% url 'allorderlist-page' %}" style="color:black;">รายการสั่งซื้อทั้งหมด </a>
+                       </li>
+                     
+                         
+                     {% endif %}  
+                  
+                   
+
+
+
+                </ul>
+                      {% if user.is_authenticated %}
+
+                          <img src="{{ user.profile.photo.url}}"width="40" height="40" class="rounded-circle">&nbsp&nbsp&nbsp
+                          <p style="color:black;margin-top: 15px ">สวัสดีคุณ {{user.first_name}}  {{user.last_name}}  [ {{user.profile.usertype}} ]&nbsp&nbsp&nbsp </p>
+                          <a class="btn btn-success" href="/logout/">ออกจากระบบ</a>
+                      {% else %}
+
+                          <a class="btn btn-primary" href="{% url 'register-page' %}">สมัครสมาชิก</a>&nbsp&nbsp&nbsp 
+                      <a class="btn btn-primary" href="/login/">เข้าสู่ระบบ</a>
+
+
+                      {% endif %} 
+
+
+
+                      
+
+
+                      
+                  
+
+                
+  </div>  
+    
+</nav>
+
+
+  
+<div class="container" style="margin-top: 30px">
+
+  {% block content %}
+  {% endblock content %}
+ 
+
+
+</div>
+
+
+
+
+  
+</body>
+</html>
+

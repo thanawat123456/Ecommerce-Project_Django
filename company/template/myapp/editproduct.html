@@ -1,0 +1,95 @@
+{% extends 'myapp/testhome.html' %}
+
+
+  
+{% block content %}
+<div class="container" style="margin-bottom: 50px">
+  <h2>แก้ไขรายละเอีนดสินค้า: {{product.name}}</h2>
+
+    <img src="{{product.image.url}}"><br>
+
+  <form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+
+   <h1>CAT {{product.catname}}</h1>
+
+    <div class="form-group">
+      <label for="name">ชื่อสินค้า:</label>
+      <input type="text" class="form-control" id="name" name="name" value="{{product.name}}">
+    </div>
+
+    <div class="form-group">
+      <label for="price">ราคา:</label>
+      <input type="text" class="form-control" id="price" name="price" value="{{product.price}}">
+    </div>
+
+    <div class="form-group">
+  <label for="detail">รายละเอียด:</label>
+  <textarea class="form-control" rows="10" id="detail" name="detail" >{{product.detail}}</textarea>
+  </div>
+
+  <div class="form-group">
+      <label for="category">เลือกประเภทสินค้า</label>
+      <select class="form-control" id="category" name="category">
+        {% for ct in category %}
+            {% if ct.catname == product.catname.catname %}
+               <option selected="selected">{{ct.catname}}</option>
+
+             {% else %} 
+                <option>{{ct.catname}}</option>
+             {% endif %} 
+           
+             
+        {% endfor %}   
+
+      </select>
+
+  </div>
+
+  <div class="form-group">
+    <p>มีในสต๊อกหรือไม่:</p>
+      {% if product.instock %}
+           <input type="radio" id="instock_true" name="instock" value="instock_true" checked>
+          <label for="male">มี</label><br>
+
+
+          <input type="radio" id="instock_false" name="instock" value="instock_false">
+          <label for="female">หมด</label><br>
+
+       {% else %} 
+          <input type="radio" id="instock_true" name="instock" value="instock_true">
+          <label for="male">มี</label><br>
+
+
+          <input type="radio" id="instock_false" name="instock" value="instock_false"checked>
+          <label for="female">หมด</label><br>
+
+        {% endif %}  
+         
+  </div>
+
+
+    <div class="form-group">
+      <label for="quantity">จำนวนสินค้า:</label>
+      <input type="text" class="form-control" id="quantity" name="quantity" value="{{product.quantity}}">
+    </div>
+
+    <div class="form-group">
+      <label for="unit">หน่วยสินค้า:</label>
+      <input type="text" class="form-control" id="unit" name="unit" value="{{product.unit}}">
+    </div>
+
+    <div class="form-group">
+      <label for="image">เลือกรูปสินค้า</label>
+      <input type="file" class="form-control" id="image" name="image" >
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  </div>
+
+
+
+{% endblock content %}
+

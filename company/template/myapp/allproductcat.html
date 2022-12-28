@@ -1,0 +1,104 @@
+{% extends 'myapp/testhome.html' %}
+  
+{% block content %}
+    
+      <h3>สินค้าหมวด "{{catname}}"</h3>
+      <p> ตอนนี้เรามีสินค้าให้เลือกชมหลายรายการ </p>
+      
+      <div class="container-fluid">
+
+        <div class="row">
+          {% for pd in product  %} 
+             <div class="col-sm-4"> 
+
+             <div class="card" style="width:300px; height:550">
+
+              {% if pd.image %}
+
+                 <img class="card-img-top" src="{{ pd.image.url }} " width="400" style="width: 300px; height: 200px; overflow: hidden;">
+
+             {% elif pd.imageurl != None %}  
+                 <img class="card-img-top" src="{{ pd.imageurl }} " width="400" style="width: 300px; height: 200px; overflow: hidden;">
+              
+             {% else %}
+                 <img class="card-img-top" src="/media/dung.png" width="400" style="width: 300px; height: 200px; overflow: hidden;" >
+
+             {% endif %}
+
+
+             <div class="card-body">
+                <h1 class="card-title">{{ pd.name }}</h1> 
+                <p>ราคา {{ pd.price }} บาท/กิโลกรัม</p>
+                <p>{{ pd.detail |linebreaks|truncatechars_html:100}}</p>
+                <a href="{% url 'detail-page' pd.id %}" target="_blank">รายละเอียด</a>
+                </p>
+                {% if pd.quantity > 0 and pd.instock == True %}
+                    <p>สินค้ามีในสต็อก : {{ pd.quantity }} {{ pd.unit }}</p>
+                    
+                 {% else %}
+                    <p><font color="red">สินค้าหมด</font></p>   
+                {% endif %}  
+              
+
+
+                      
+
+                  {% if user.is_authenticated and user.profile.usertype == 'admin' %}
+                        <a href="{% url 'editproduct-page' pd.id %}" class="btn btn-success">แก้ไขรายละเอียดสินค้า</a>
+
+                  {% elif pd.quantity > 0 and pd.instock == True %}
+                        <a href="{% url 'addtocart-page' pd.id %}" class="btn btn-success">เพิ่มไปยังตระกร้า</a>
+                   {% else %}
+                        <a href="#" class="btn btn-warning">สินค้าหมด</a>     
+                         
+                  {% endif %}   
+
+           </div>
+           </div>
+
+                <br> <br>
+      </div>
+     {% endfor %}
+      
+     </div>
+   </div>
+
+   <br>
+
+   
+
+   <ul class="pagination">
+
+
+    {% if product.has_previous and product.has_next != True %}
+        <li class="page-item"> <a class="page-link" href="?page={{product.previous_page_number}}"><</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:-2}}">{{product.number|add:-2}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:-1}}">{{product.number|add:-1}}</a></li>
+        <li class="page-item active"> <a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li>
+
+    {% endif %}  
+
+      
+     {% if product.has_previous and product.has_next %}
+
+        <li class="page-item"> <a class="page-link" href="?page={{product.previous_page_number}}"><</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:-1}}">{{product.number|add:-1}}</a></li>
+        <li class="page-item active"> <a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:1}}">{{product.number|add:1}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.next_page_number}}">></a></li>
+     {% endif %}  
+
+
+     {% if product.has_next and product.has_previous != True %}
+
+        <li class="page-item active"> <a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:1}}">{{product.number|add:1}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.next_page_number}}">></a></li>
+     {% endif %} 
+
+   </ul>
+
+
+
+
+{% endblock content %}

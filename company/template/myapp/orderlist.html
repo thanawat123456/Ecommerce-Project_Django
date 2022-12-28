@@ -1,0 +1,57 @@
+{% extends 'myapp/testhome.html' %}
+{% load humanize %}
+
+  
+{% block content %}
+    
+      <h3>รายการสินค้าทั้งหมด</h3>
+      <p>รายการสั่งซื้อ และสถานะการสั่งซื้อ</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>เวลาสั่งซื้อ</th>
+            <th>orderid</th>
+            <th>ยอดรวม</th>
+            <th>ค่าส่ง</th>
+            <th>ยอดโอน</th>
+            <th>สถานะ</th>
+            <th>Tracking No.</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          {% for od in allorder %}
+              <tr>
+                <td>{{od.stamp}}</td>  
+                <td><a href="{% url 'myorder-page' od.orderid %}">{{od.orderid}}</a></td>                
+                <td>{{od.total|intcomma}}</td>
+                <td>{{od.shipcost|intcomma}}</td>
+                <td>{{od.total|add:od.shipcost|intcomma}}</td>
+
+                
+                <td>
+                  
+                  {% if od.paid %}
+                      <i class="fa fa-money" style="font-size:16px;color:green;"></i> จ่ายเงินแล้ว
+                  {% else %}
+                      <a href="{% url 'uploadslip-page' od.orderid %}" class="btn btn-primary">อัพโหลดสคริป</a>
+                  {% endif %}        
+                  
+                </td> 
+                <td>
+                  
+                  {% if od.trackingnumber != None %}
+
+                   {{od.trackingnumber}}
+
+                  {% endif %} 
+                </td>              
+
+              </tr>
+          {% endfor %}    
+     
+        </tbody>
+      </table>
+
+
+{% endblock content %}

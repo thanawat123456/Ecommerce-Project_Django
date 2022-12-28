@@ -1,0 +1,78 @@
+{% extends 'myapp/testhome.html' %}
+  
+{% block content %}
+ <div class="container" style="margin-bottom: 50px">
+
+
+  <h2>ข้อมูลการจัดส่ง</h2>
+  <p>กรุณากรอกข้อมูลการจัดส่งสินค้า</p>
+  <form method="POST" >
+  {% csrf_token %}
+
+
+    <div class="form-group">
+      <label for="name">ชื่อ-สกุลผู้รับ</label>
+      <input type="text" class="form-control" id="name" name="name">
+    </div>
+
+     <div class="form-group">
+      <label for="tel">เบอร์โทรศัพท์</label>
+      <input type="text" class="form-control" id="tel" name="tel">
+    </div>
+
+    <div class="form-group">
+      <label for="address">ที่อยู่จัดส่ง</label>
+      <textarea class="form-control" rows="5" id="address" name="address" placeholder="ตัวอย่าง: เลขที่ 806 หมู่ 19 ตำบลศิลา อำเภอเมือง จังหวัดขอนแก่น 40000"></textarea> 
+    </div>
+
+    <p>---------------------------------</p>
+    <label>เลือกประเภทการจัดส่ง</label>
+    <div class="form-check">
+      <label class="foorm-check-label" for="ems">
+        <input type="radio" name="shipping" id="ems" value="ems">EMS (50 บาท)
+      </label>
+    </div>
+
+    <div class="form-check">
+      <label class="foorm-check-label" for="register">
+        <input type="radio" name="shipping" id="register" value="register">ลงทะเบียน (30 บาท)
+      </label>
+    </div>
+
+    <p>---------------------------------</p>
+    <label>การชำระเงิน</label>
+    <div class="form-check">
+      <label class="foorm-check-label" for="transfer">
+        <input type="radio" name="payment" id="transfer" value="transfer">โอนเงินผ่านบัญชีธนาคาร
+      </label>
+    </div>
+
+
+    <div class="form-check">
+      <label class="foorm-check-label" for="cod">
+        <input type="radio" name="payment" id="cod" value="cod">เก็บเงินปลายทาง
+      </label>
+    </div>
+
+    <div class="form-group">
+      <label for="other">หมายเหตุ</label>
+      <textarea class="form-control" rows="5" id="other" name="other" placeholder="ฝากข้อความถึงผู้ขาย"></textarea> 
+    </div>
+    <input type="hidden" name="page" value="information">
+
+
+    <button type="submit" class="btn btn-primary">NEXT</button>
+
+
+   
+  </form>
+
+  </div>
+
+
+{% endblock content %}
+
+
+
+
+

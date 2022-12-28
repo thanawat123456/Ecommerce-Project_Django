@@ -1,0 +1,150 @@
+{% extends 'myapp/testhome.html' %}
+{% load markdown_extras %}
+
+
+  
+{% block content %}
+<head>
+<style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+</style>
+</head>
+    
+      <h3>สินค้าทั้งหมดในร้าน</h3>
+      <p> ตอนนี้เรามีสินค้าให้เลือกชมหลายรายการ </p>
+      
+      <div class="container-fluid">
+
+        <div class="row">
+          {% for pd in product  %} 
+             <div class="col-sm-4"> 
+
+             <div class="card" style="width:300px; height:550">
+
+              {% if pd.image %}
+              <div class="card">
+                 <img src="{{ pd.image.url }}" alt="Denim Jeans" style="width:100%">
+  
+  
+</div>
+
+                
+      
+              
+             {% else %}
+                 <img class="card-img-top" src="/media/dung.png" width="400" style="width: 300px; height: 200px; overflow: hidden;" >
+
+             {% endif %}
+
+
+             <div class="card-body">
+                <h1 class="card-title">{{ pd.name }}</h1> 
+                <p>ราคา {{ pd.price }} บาท/กิโลกรัม</p>
+                
+
+                    <a href="{% url 'detail-page' pd.id %}" target="_blank">รายละเอียด</a>
+                </p>
+                {% if pd.quantity > 0 and pd.instock == True %}
+                    <p>สินค้ามีในสต็อก : {{ pd.quantity }} {{ pd.unit }}</p>
+                    
+                 {% else %}
+                    <p><font color="red">สินค้าหมด</font></p>   
+                {% endif %}  
+              
+
+
+                      
+
+                  {% if user.is_authenticated and user.profile.usertype == 'admin' %}
+                        <a href="{% url 'editproduct-page' pd.id %}" class="btn btn-success">แก้ไขรายละเอียดสินค้า</a>
+
+                  {% elif user.is_authenticated and user.username == null %}      
+                        <a href="{% url 'addtocart-page' pd.id %}" ><button>sdfsd</button></a>
+
+                  {% elif pd.quantity > 0 and pd.instock == True %}
+                        <a href="{% url 'addtocart-page' pd.id %}" ><button>เพิ่มไปยังตระกร้า</button></a>
+                        
+                   {% else %}
+                        <a href="#" class="btn btn-warning">สินค้าหมด</a>     
+                         
+                  {% endif %}  
+
+
+
+
+           </div>
+           </div>
+
+                <br> <br>
+      </div>
+     {% endfor %}
+      
+     </div>
+   </div>
+
+   <br>
+
+   
+
+   <ul class="pagination">
+
+
+    {% if product.has_previous and product.has_next != True %}
+        <li class="page-item"> <a class="page-link" href="?page={{product.previous_page_number}}"><</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:-2}}">{{product.number|add:-2}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:-1}}">{{product.number|add:-1}}</a></li>
+        <li class="page-item active"> <a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li>
+
+    {% endif %}  
+
+      
+     {% if product.has_previous and product.has_next %}
+
+        <li class="page-item"> <a class="page-link" href="?page={{product.previous_page_number}}"><</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:-1}}">{{product.number|add:-1}}</a></li>
+        <li class="page-item active"> <a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:1}}">{{product.number|add:1}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.next_page_number}}">></a></li>
+     {% endif %}  
+
+
+     {% if product.has_next and product.has_previous != True %}
+
+        <li class="page-item active"> <a class="page-link" href="?page={{product.number}}">{{product.number}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.number|add:1}}">{{product.number|add:1}}</a></li>
+        <li class="page-item"> <a class="page-link" href="?page={{product.next_page_number}}">></a></li>
+     {% endif %} 
+
+   </ul>
+
+
+
+
+{% endblock content %}

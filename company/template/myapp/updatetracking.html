@@ -1,0 +1,76 @@
+{% extends 'myapp/testhome.html' %}
+{% load humanize %}
+
+  
+{% block content %}
+ <div class="container" style="margin-bottom: 50px">
+
+
+  <h2>อัพเดตเลขพัสดุ</h2>
+  <p>ORDERID: {{orderid}}</p>
+
+
+  <form method="POST" >
+  {% csrf_token %}
+
+
+    <div class="form-group">
+      <label for="trackingnumber">เลขพัสดุ / EMS / ลงทะเบียน</label>
+      <input type="text" class="form-control" id="trackingnumber" name="trackingnumber">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+   
+  </form>
+
+  <div class="container">
+      <h2>สินค้าทั้งหมด</h2>
+      <p>รายการสินค้าที่สั่งซื้อ</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>รหัส</th>
+            <th>จำนวน</th>
+            <th>รวมยอด</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pd in odlist %}
+          <tr>
+            <th >{{pd.productid}}</th>
+            <th >{{pd.quantity|intcomma}}</th>
+            <th>{{pd.total|intcomma}}</th>
+          </tr>
+           {% endfor %}
+          <tr>
+            <td><h4>Total</h4></td>
+            <td></td>
+            <td></td>
+            
+            <td><h4>{{count|intcomma}}</h4></td>
+            <td><h4>{{total|intcomma}}</h4></td>
+            <td></td>
+          </tr>
+        </tbody>
+
+
+      </table>
+      <br>
+      
+      
+    </div>
+
+  </div>
+
+
+{% endblock content %}
+
+
+
+
+
+
+
+

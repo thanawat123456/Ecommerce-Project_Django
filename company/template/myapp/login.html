@@ -1,0 +1,35 @@
+{% extends 'myapp/testhome.html' %}
+
+
+
+{% block content %}
+<div class="container" style="margin-bottom: 50px">
+
+
+  <h2>เข้าสู่ระบบ</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+
+
+    <div class="form-group">
+      <label for="username">อีเมล</label>
+      <input type="text" class="form-control" id="username" name="username">
+    </div>
+
+    <div class="form-group">
+      <label for="password">รหัสผ่าน</label>
+      <input type="password" class="form-control" id="password" name="password">
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+
+
+  </form>
+
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,272 @@
+{% extends 'myapp/testhome.html' %}
+
+
+  
+{% block content %}
+<style>
+.box {
+    margin-top: 45px;
+    background-color: #f7fafa;
+    
+    border-radius: 5px;
+}
+.img-box {
+   
+
+    
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+        align-items: center;
+ 
+    padding: 10px;
+   
+}
+.about_section {
+    background-color: #f9fafa;
+}
+.long_section {
+    margin-left: 30px;
+    margin-right: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.layout_padding {
+    padding: 90px 0;
+      padding-top: 40px;
+      padding-bottom: 40px
+   
+
+}
+</style>
+
+<br>
+<br>
+  <h3>สินค้าล่าสุด</h3>
+      <p> สินค้าล่าสุดของร้าน </p>
+
+      
+      <div class="container-fluid">
+
+        <div class="row">
+          {% for pd in product  %} 
+             <div class="col-md-6 col-lg-4"> 
+              <div class="box">
+
+             <div class="img-box " style="width:400px; height:550">
+
+
+              {% if pd.image %}
+
+                 <img class="img-box" src="{{ pd.image.url }} " width="400" style="width: 300px; height: 200px; overflow: hidden;">
+
+            
+             {% else %}
+                 <img class="img-box" src="/media/default.png" width="400" style="width: 300px; height: 200px; overflow: hidden;" >
+
+             {% endif %}
+
+
+             <div class="card-body">
+                <h1 class="card-title">{{ pd.name }}</h1> 
+                <p>ราคา {{ pd.price }} บาท/ลูก</p>
+              
+                 <a href="{% url 'detail-page' pd.id %}" target="_blank">รายละเอียด</a>
+                </p>
+                {% if pd.quantity > 0 %}
+                    <p>สินค้ามีในสต็อก : {{ pd.quantity }} {{ pd.unit }}</p>
+                 {% else %}
+                    <p><font color="red">สินค้าหมด กรุณาติดต่อแอดมิน</font></p>   
+                {% endif %}  
+ 
+
+      
+           </div>
+           </div>
+
+                <br> <br>
+      </div>
+    </div>
+     {% endfor %}
+      
+     </div>
+   </div>
+   <br>
+   <br>
+
+  
+
+
+  <div class="container">
+    <center><a href="{% url 'allproduct-page' %}"><h1>ดูสินค้าทั้งหมด</h1></a></center>
+    
+
+  </div>
+
+<div class="container">
+  <!-- Footer -->
+<html>
+<head>
+
+<style>
+.footer {
+  
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: #f7fafa;
+   color: Black;
+   text-align: center;
+}
+
+
+</style>
+</head>
+<body>
+
+
+
+<div class="footer">
+  
+<footer class="page-footer font-small mdb-color lighten-3 pt-4">
+
+  <!-- Footer Links -->
+  <div class="container text-center text-md-left">
+
+    <!-- Grid row -->
+    <div class="row">
+
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 mr-auto my-md-4 my-0 mt-4 mb-1">
+
+        <!-- Content -->
+        <h5 class="font-weight-bold text-uppercase mb-4">Opening Hours</h5>
+        <p>Come Visit</p>
+        <p>Mon-Fri: 7am-10pm</p>
+        <p>Saturday: 8am-10pm</p>
+        <p>Sunday: 8am-11pm</p>
+
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-2 col-lg-2 mx-auto my-md-4 my-0 mt-4 mb-1">
+
+        <!-- Links -->
+        <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
+
+        <ul class="list-unstyled">
+          <li>
+            <p>
+              <a href="#!">PROJECTS</a>
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="#!">ABOUT US</a>
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="#!">BLOG</a>
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="#!">AWARDS</a>
+            </p>
+          </li>
+        </ul>
+
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 mx-auto my-md-4 my-0 mt-4 mb-1">
+
+        <!-- Contact details -->
+        <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
+
+        <ul class="list-unstyled">
+          <li>
+            <p>
+              500 KKU Street khonkaen , KKC 40000 </p>
+          </li>
+          <li>
+            <p>
+             essofruitshop@gmail.com</p>
+          </li>
+          <li>
+            <p>
+             0928531478 </p>
+          </li>
+          <li>
+            <p>
+               0652709145</p>
+          </li>
+        </ul>
+
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-2 col-lg-2 text-center mx-auto my-4">
+
+        <!-- Social buttons -->
+        <h5 class="font-weight-bold text-uppercase mb-4">Follow Us</h5>
+
+        <!-- Facebook -->
+        <img src="/media/facebook.png" width="40">
+        <br>
+        <br>
+        
+        <img src="/media/twitter.png" width="40">
+        <br>
+        <br>
+        
+        <img src="/media/instagram.png" width="40">
+        </a>
+
+      </div>
+      <!-- Grid column -->
+
+    </div>
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2020 Copyright:
+    <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
+  </div>
+
+
+</footer>
+<!-- Footer -->
+</div>
+
+</body>
+</html> 
+
+ 
+
+</div>
+
+
+
+      
+      
+
+{% endblock content %}
+
+
+
+
+

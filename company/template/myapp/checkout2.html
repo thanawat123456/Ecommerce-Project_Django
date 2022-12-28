@@ -1,0 +1,93 @@
+{% extends 'myapp/testhome.html' %}
+
+{% load humanize %}
+  
+{% block content %}
+    
+    <h3>ข้อมูลการจัดส่ง</h3>
+    <p>
+      ชื่อผู้รับ: {{name}}<br>
+      เบอร์โทรศัพท์: {{tel}}<br>
+      ที่อยู่จัดส่ง: {{address}}<br>
+      {% if shipping == 'ems' %}
+          รูปแบบการจัดส่ง: EMS
+      {% else %}
+          รูปแบบการจัดส่ง: ลงทะเบียน
+
+      {% endif %} <br>
+      {% if payment == 'tranfer' %}
+          ชำระผ่าน: โอนเงินเข้าบัญชีธนาคาร
+      {% else %}          
+          ชำระผ่าน: เก็บเงินปลายทาง
+      {% endif %}<br>
+      หมายเหตุ: {{other}}<br>    
+
+    </p>
+
+    <div class="container">
+      <h2>สินค้าทั้งหมด</h2>
+      <p>รายการสินค้าที่สั่งซื้อ</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>รหัส</th>
+            <th>สินค้า</th>
+            <th>ราคา</th>
+            <th>จำนวน</th>
+            <th>รวมยอด</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pd in mycart %}
+          <tr>
+            <th>{{pd.productid}}</th>
+            <th>{{pd.productidname}}</th>
+            <th>{{pd.price|intcomma}}</th>
+            <th>{{pd.quantity|intcomma}}</th>
+            <th>{{pd.total|intcomma}}</th>
+          </tr>
+           {% endfor %}
+          <tr>
+            <td><h4>Total</h4></td>
+            <td></td>
+            <td></td>
+            
+            <td><h4>{{count}}</h4></td>
+            <td><h4>{{total|intcomma}}</h4></td>
+            <td></td>
+          </tr>
+        </tbody>
+        
+
+      </table>
+      <br>
+      
+    </div>
+
+    <form method="POST">
+     {% csrf_token %}
+     <input type="hidden" id="name" name="name" value="{{name}}">
+     <input type="hidden" id="tel" name="tel" value="{{tel}}">
+     <input type="hidden" id="address" name="address" value="{{address}}">
+     <input type="hidden" id="shipping" name="shipping" value="{{shipping}}">
+     <input type="hidden" id="payment" name="payment" value="{{payment}}">
+     <input type="hidden" id="other" name="other" value="{{other}}">
+     <input type="hidden" id="other" name="page" value="{{confirm}}">
+
+     <input type="hidden" name="page" value="confirm">
+
+     <button type="submit" class="btn btn-primary">Confirm</button>
+
+
+    </form>
+     
+
+ 
+
+
+{% endblock content %}
+
+
+
+
+

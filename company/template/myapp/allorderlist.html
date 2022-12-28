@@ -1,0 +1,94 @@
+{% extends 'myapp/testhome.html' %}
+{% load humanize %}
+
+
+  
+{% block content %}
+    
+      <h3>รายการสินค้าทั้งหมด (admin)</h3>
+      <p>รายการสั่งซื้อ และสถานะการสั่งซื้อ</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>เวลาสั่งซื้อ</th>
+            <th>orderid</th>
+            <th>ยอดรวม</th>
+            <th>ค่าส่ง</th>
+            <th>ยอดโอน</th>
+            <th>สลิป</th>
+            <th>จ่ายแล้ว</th>
+            <th>Tracking No.</th>
+
+            <th>l</th>
+
+           
+          </tr>
+        </thead>
+        <tbody>
+          {% for od in allorder %}
+              <tr>
+                <td>{{od.stamp}}</td>
+                <td><a href="{% url 'updatetracking' od.orderid%}">{{od.orderid}} </a>({{od.name}})</td>
+                <td>{{od.total|intcomma}}</td>
+                <td>{{od.shipcost|intcomma}}</td>
+                <td>{{od.total|add:od.shipcost|intcomma}}</td>
+                
+                <td>
+                  {% if od.slip %}
+                      
+                      <a href="{{od.slip.url}}">ดูสลิป</a>
+                  {% else %}
+                       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+                  <i class="fa fa-window-close" style="font-size:37px;color:red;"></i>   
+                  {% endif %}        
+                  
+                </td>
+
+                <td>
+
+
+                  {% if od.paid and od.slip %}
+
+                      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!--เอาไปใส่ในหน้า base ก็ได้ ตรงช่องระหว่าง head -->
+
+                      <a href="{% url 'updatestatus' od.orderid 'cancel' %}"><i class="fa fa-check-square" style="font-size:37px;color:green;"></i></a>
+
+                  {% elif od.paid == False and not od.slip %}    
+                      <i class="fa fa-window-close" style="font-size:37px;color:red;"></i>  
+
+
+
+                  {% else %}
+                        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+                        <a class="btn btn-light" href="{% url 'updatestatus' od.orderid 'confirm' %}"><i class="fa fa-window-close" style="font-size:17px;color:blue;">ยืนยัน</i></a>
+                  {% endif %}
+
+                  
+                </td>
+                <td>
+
+                {% if od.trackingnumber != None %}
+
+                   {{od.trackingnumber}}
+
+                {% endif %}  
+                </td> 
+                  
+              </tr>
+          {% endfor %}    
+     
+        </tbody>
+      </table>
+      <br>
+
+      <ul class="pagination">
+
+
+
+
+   </ul>
+
+
+{% endblock content %}

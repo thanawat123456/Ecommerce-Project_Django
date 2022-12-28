@@ -1,0 +1,63 @@
+{% extends 'myapp/testhome.html' %}
+{% load humanize %}
+
+
+  
+{% block content %}
+    
+      <h3>ตระกร้าสินค้าของฉัน</h3>
+      <p>สินค้าทั้งหมดของลูกค้าที่อยู่ในตระกร้า พร้อมยืนยันการสั่งซื้อ</p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>เวลาสั่งซื้อล่าสุด</th>
+            <th>รหัส</th>
+            <th>สินค้า</th>
+            <th>ราคา</th>
+            <th>จำนวน</th>
+            <th>รวมยอด</th>
+            <th>ลบ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pd in mycart %}
+              <tr>
+                <th>{{pd.stamp}}</th>
+                <th>{{pd.productid}}</th>
+                <th>{{pd.productidname}}</th>
+                <th>{{pd.price|intcomma}}</th>
+                <th>{{pd.quantity|intcomma}}</th>
+                <th>{{pd.total|intcomma}}</th>
+                <th>
+                  <form method="POST" id="form{{pd.productid}}" onsubmit="return confirm('ยืนยันการลบใช่หรือไม่ ?')">
+                  {% csrf_token %}
+                  <input type="hidden" name="productid" value="{{pd.productid}}">
+                  <button type="submit" form="form{{pd.productid}}" class="btn btn-danger">ลบ</button>
+                    
+                  </form>                 
+                </th>
+
+              </tr>
+          {% endfor %}    
+          <tr>
+            <td><h4>Total</h4></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><h4>{{count}}</h4></td>
+            <td><h4>{{total|intcomma}}</h4></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+   <div class="row">
+    <a href="{% url 'mycartedit-page' %}" class="btn btn-primary">แก้ไขจำนวนสินค้า</a>
+    <div style="padding: 10px"></div>
+    <a href="{% url 'checkout-page' %}" class="btn btn-success">Checkout</a>
+     
+   </div>
+      
+
+
+{% endblock content %}

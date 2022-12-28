@@ -1,0 +1,14 @@
+{% extends 'myapp/base.html' %}
+{% load markdown_extras %}
+
+
+     
+
+  
+{% block content %}
+
+      <h3>{{text | markdown |safe}}</h3>
+
+
+
+{% endblock content %}

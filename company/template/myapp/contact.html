@@ -1,0 +1,53 @@
+{% extends 'myapp/testhome.html' %}
+
+
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm text-center">
+      <h1 class="div-heading display-4">ติดต่อเรา</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <form>
+        <div class="form-group">
+          <input type="name" class="form-control" id="exampleInputName" placeholder="Your Full Name...">
+        </div>
+        <div class="form-group">
+          <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+            placeholder="Your Email Address...">
+        </div>
+        <div class="form-group">
+          <select class="form-control" id="exampleFormControlSelect1" placeholder="Select Services...">
+            <option>Corporate</option>
+            <option>Wedding</option>
+            <option>Pickup</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <textarea class="form-control" aria-label="With textarea"></textarea>
+        </div>
+        <button type="submit" class="btn btn-warning btn-lg btn-block">Submit</button>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <h5>Address: <small class="text-muted">500 KKU Street khonkaen , KKC 40000 </small></h5>
+      <h5>Email: <small class="text-muted">essofruitshop@gmail.com</small></h5>
+      <h5>Tell: <small class="text-muted">0928531478 || 0652709145</small></h5>
+
+      <div class="text-center">
+        <img class="img-fluid contact-image" alt="Responsive image"
+          src="https://i0.wp.com/th.kku.ac.th/wp-content/uploads/2019/12/80x120cm_map1_edit2558_2000px-1920x1669.jpg"
+          class="rounded" alt="...">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+{% endblock content %}

@@ -1,0 +1,61 @@
+{% extends 'myapp/testhome.html' %}
+{% block content %}
+
+ {% if status == 'delete' %}
+   <div class="alert alert-danger">
+     <strong>ลบสินค้าเรียบร้อย!</strong> หากต้องการสินค้าเพิ่ม กรุณากดสั่งซื้อใหม่
+   </div>
+ {% endif %}
+      <h3>แก้ไขข้อมูลในตระกร้า</h3>
+      <p>ท่านสามารถแก้ไข้ข้อมูลในตระกร้าได้</p>
+      <form method="POST" id="formsave">
+        {% csrf_token %}
+      <table class="table">
+        <thead>
+          <tr>
+            
+            <th>รหัส</th>
+            <th>สินค้า</th>
+            <th>ราคา</th>
+            <th>จำนวน</th>
+            <th>ลบ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pd in mycart %}
+              <tr>
+                32`
+                <td>{{pd.productid}}</td>
+                <td>{{pd.productidname}}</td>
+                <td>{{pd.price}}</td>
+
+                <td><input min="0" type="number" name="pd_{{pd.productid}}" value="{{pd.quantity}}"></td>
+
+                <td>
+                  
+                </td>
+
+              </tr>
+          {% endfor %}    
+        </tbody>
+
+      </table>
+
+         <input type="hidden" name="checksave" value="checksave">
+         
+
+  
+    </form> 
+
+    <div class="row">
+      <button type="submit" form="formsave" class="btn btn-primary">บันทึก</button>
+      <div style="padding: 10px;"></div>
+      <form id="formclear" method="post" onsubmit="return confirm('ยืนยันการลบทั้งหมดใช่หรือไม่')"> 
+        {% csrf_token %}
+        <input type="hidden" name="clear" value="clear">
+        <button type="submit" form="formclear" class="btn btn-danger">ลบสินค้าทั้งหมดในตระกร้า</button>
+      </form>
+      
+    </div>
+  
+{% endblock content %}

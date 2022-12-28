@@ -1,0 +1,54 @@
+{% extends 'myapp/testhome.html' %}
+
+{% load humanize %}
+
+{% block content %}
+
+
+<div class="container" style="margin-bottom: 100px">
+
+  <h3>อัพโหลดสลิป</h3>
+  <p>
+    อัพโหลดสลิปของ ORDER: {{orderid}}<br>
+    ประเภทการจัดส่ง: {{oddetail.shipping}}<br>
+    {% if oddetail.payment == 'cod' %}
+    บวกค่าเก็บปลายทาง 20 บาท<br>
+    {% endif %}
+    จำนวนสินค้า: {{count}} ชิ้น<br>
+    ยอดรวมสินค้า: {{total}} บาท<br>
+    ค่าส่ง: {{shipcost}}<br>
+
+  </p>
+  <h3>รวมยอดโอนทั้งหมด: {{grandtotal|intcomma}} บาท</h3>
+  <br>
+  {% if oddetail.slip %}
+  <img src="{{oddetail.slip.url}}">
+
+  {% else %}
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="sliptime">วันเวลาที่โอน</label>
+      <input type="text" class="form-control" id="sliptime" name="sliptime" placeholder="ตัวอย่าง: 2021/11/2 12:34">
+
+    </div>
+
+    <div class="form-group">
+      <label for="slip">ไฟล์สลิปอัพโหลด</label>
+      <input type="file" class="form-control" id="slip" name="slip">
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+
+  </form>
+
+  {% endif %}
+
+
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,179 @@
+{% extends 'myapp/testhome.html' %}
+
+
+  
+{% block content %}
+    
+      <!DOCTYPE html>
+<html>
+<head>      
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+}
+
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #d1d1d1;
+  color: black ;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.title {
+  color: grey;
+}
+
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="about-section" >
+  <h1>About Us Page</h1>
+  <p>ทางร้านของเราเป็นธุรกิจจำหน่ายชุดนักศึกษา มีจุดมุ่งหมายสำคัญคือการนำระบบสินค้าออนไลน์มาเป็นอีกหนึ่งช่องทางการจัดจำหน่ายสินค้า ช่วยผู้ประกอบการเพิ่มคุณภาพให้บริการขายชุดนักศึกษา ทำให้ลูกค้าได้รับความสะดวกรวดเร็วแม่นยำและประหยัดเวลาในการซื้อสินค้า </p>
+</div>
+
+<h2 style="text-align:center">Our Team</h2>
+<div class="row">
+  <div class="column">
+    <div class="card">
+      <div class="container">
+            <br>
+        <h2>เอสโซ่</h2>
+        <p class="title">CEO</p>
+        
+        <p>essothanawat@kkumail.com</p>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+      <div class="container">
+             <br>
+        <h2>ปอ</h2>
+        <p class="title">Marketing</p>
+        
+        <p>duanghathai@gmail.com</p>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="column">
+    <div class="card">
+      <div class="container">
+             <br>
+        <h2>แบม</h2>
+        <p class="title">Manufacturing Manager</p>
+        
+        <p>siramol@gmail.com</p>
+        <p><button class="button">Contact</button></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="column">
+  <div class="card">
+    <div class="container">
+           <br>
+      <h2>เอิร์ธ</h2>
+      <p class="title">Finance Meneger</p>
+      
+      <p>awiruth@gmail.com</p>
+      <p><button class="button">Contact</button></p>
+    </div>
+  </div>
+</div>
+
+<div class="column">
+  <div class="card">
+    <div class="container">
+           <br>
+      <h2>น้ำพุ</h2>
+      <p class="title">ออกบบ</p>
+      
+      <p>pannipa@gmail.com</p>
+      <p><button class="button">Personal Meneger</button></p>
+    </div>
+  </div>
+</div>
+
+<div class="column">
+  <div class="card">
+    <div class="container">
+           <br>
+      <h2>อ้น</h2>
+      <p class="title">Purchasing Manager</p>
+      
+      <p>kuakorn@gmail.com</p>
+      <p><button class="button">Contact</button></p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+{% endblock content %}

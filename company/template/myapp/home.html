@@ -1,0 +1,259 @@
+{% extends 'myapp/base.html' %}
+
+
+  
+{% block content %}
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="/media/i1.jpg" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/media/i2.jpg" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/media/i3.jpg" alt="Third slide">
+    </div>
+     <div class="carousel-item">
+      <img class="d-block w-100" src="/media/i4.jpg" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+<br>
+<br>
+  <h3>สินค้าล่าสุด</h3>
+      <p> สินค้าล่าสุดของร้าน </p>
+      
+      <div class="container-fluid">
+
+        <div class="row">
+          {% for pd in product  %} 
+             <div class="col-sm-4"> 
+
+             <div class="card" style="width:300px; height:550">
+
+              {% if pd.image %}
+
+                 <img class="card-img-top" src="{{ pd.image.url }} " width="400" style="width: 300px; height: 200px; overflow: hidden;">
+
+             {% elif pd.imageurl != None %}  
+                 <img class="card-img-top" src="{{ pd.imageurl }} " width="400" style="width: 300px; height: 200px; overflow: hidden;">
+              
+             {% else %}
+                 <img class="card-img-top" src="/media/default.png" width="400" style="width: 300px; height: 200px; overflow: hidden;" >
+
+             {% endif %}
+
+
+             <div class="card-body">
+                <h1 class="card-title">{{ pd.name }}</h1> 
+                <p>ราคา {{ pd.price }} บาท/ลูก</p>
+                <p>{{ pd.detail |linebreaks|truncatechars_html:100}}
+                 <a href="{% url 'detail-page' pd.id %}" target="_blank">รายละเอียด</a>
+                </p>
+                {% if pd.quantity > 0 %}
+                    <p>สินค้ามีในสต็อก : {{ pd.quantity }} {{ pd.unit }}</p>
+                 {% else %}
+                    <p><font color="red">สินค้าหมด กรุณาติดต่อแอดมิน</font></p>   
+                {% endif %}  
+ 
+
+
+           </div>
+           </div>
+
+                <br> <br>
+      </div>
+     {% endfor %}
+      
+     </div>
+   </div>
+
+
+  <div class="container">
+    <center><a href="{% url 'allproduct-page' %}"><h1>ดูสินค้าทั้งหมด</h1></a></center>
+    
+
+  </div>
+
+<div class="container">
+  <!-- Footer -->
+<html>
+<head>
+
+<style>
+.footer {
+  
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: NavajoWhite;
+   color: Black;
+   text-align: center;
+}
+
+
+</style>
+</head>
+<body>
+
+
+
+<div class="footer">
+  
+<footer class="page-footer font-small mdb-color lighten-3 pt-4">
+
+  <!-- Footer Links -->
+  <div class="container text-center text-md-left">
+
+    <!-- Grid row -->
+    <div class="row">
+
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 mr-auto my-md-4 my-0 mt-4 mb-1">
+
+        <!-- Content -->
+        <h5 class="font-weight-bold text-uppercase mb-4">Opening Hours</h5>
+        <p>Come Visit</p>
+        <p>Mon-Fri: 7am-10pm</p>
+        <p>Saturday: 8am-10pm</p>
+        <p>Sunday: 8am-11pm</p>
+
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-2 col-lg-2 mx-auto my-md-4 my-0 mt-4 mb-1">
+
+        <!-- Links -->
+        <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
+
+        <ul class="list-unstyled">
+          <li>
+            <p>
+              <a href="#!">PROJECTS</a>
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="#!">ABOUT US</a>
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="#!">BLOG</a>
+            </p>
+          </li>
+          <li>
+            <p>
+              <a href="#!">AWARDS</a>
+            </p>
+          </li>
+        </ul>
+
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 mx-auto my-md-4 my-0 mt-4 mb-1">
+
+        <!-- Contact details -->
+        <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
+
+        <ul class="list-unstyled">
+          <li>
+            <p>
+              500 KKU Street khonkaen , KKC 40000 </p>
+          </li>
+          <li>
+            <p>
+             essofruitshop@gmail.com</p>
+          </li>
+          <li>
+            <p>
+             0928531478 </p>
+          </li>
+          <li>
+            <p>
+               0652709145</p>
+          </li>
+        </ul>
+
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none">
+
+      <!-- Grid column -->
+      <div class="col-md-2 col-lg-2 text-center mx-auto my-4">
+
+        <!-- Social buttons -->
+        <h5 class="font-weight-bold text-uppercase mb-4">Follow Us</h5>
+
+        <!-- Facebook -->
+        <img src="/media/facebook.png" width="40">
+        <br>
+        <br>
+        
+        <img src="/media/twitter.png" width="40">
+        <br>
+        <br>
+        
+        <img src="/media/instagram.png" width="40">
+        </a>
+
+      </div>
+      <!-- Grid column -->
+
+    </div>
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2020 Copyright:
+    <a href="https://mdbootstrap.com/"> MDBootstrap.com</a>
+  </div>
+
+
+</footer>
+<!-- Footer -->
+</div>
+
+</body>
+</html> 
+
+ 
+
+</div>
+
+
+
+      
+      
+
+{% endblock content %}
+
+
+
+
+

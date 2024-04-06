@@ -1,0 +1,38 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_NAME: "thanawatesso/BenjaUniformApp"
+  IMAGE_TAG: "1.0"
+  DEV_SERVER_IP: 13.228.188.81
+
+build-image:
+  stage: build
+  image: docker:20.10.10
+  services:
+    - docker:20.10.10-dind
+  before_script:
+    - docker login -u $CI_DOCKER_USER -p $CI_DOCKER_PASSWORD 
+  script:
+    - echo "Building docker image"
+    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker images
+    - docker push $IMAGE_NAME:$IMAGE_TAG
+
+deploy-on-aws:
+  stage: deploy
+  image: docker:20.10.10
+  services:
+    - docker:20.10.10-dind
+  before_script:
+    - mkdir ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+  script:
+    - echo "Deploying in AWS..."
+    - cd mywebsite 
+    - sed -i "s/ALLOWED_HOSTS = \[\]/ALLOWED_HOSTS = ['13.228.188.81', '$DEV_SERVER_IP']/" settings.py
+    - ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ec2-user@$DEV_SERVER_IP "docker run -v /var/run/docker.sock:/var/run/docker.sock -d -p 8002:8000 --name BenjaUniformApp $IMAGE_NAME:$IMAGE_TAG"
+
+

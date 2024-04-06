@@ -1,0 +1,41 @@
+{% load static %}
+<html>
+<head>
+<script>
+    window.onload = function () {
+        var chart = new CanvasJS.Chart("chartContainer", {
+          theme: "light2",
+          animationEnabled: true,
+          exportEnabled: true,
+          title:{
+            text:"Electricity Price"
+          },
+          subtitles: [{
+            text: "USA States - 2020"
+          }],
+          axisY2: [{
+            suffix: " ¢/kWh",
+            labelAngle: 0,
+            labelMaxWidth: 150,
+            lineThickness: 1
+          }],
+          axisX: {
+            reversed: true
+          },
+          data: [{
+            type: "bar",
+            yValueFormatString: "#.00 ¢/kWh",
+            axisYType: "secondary",
+            dataPoints: {{ electricity_price_data|safe }}
+          }]
+        });
+        chart.render();
+ 
+    }
+</script>    
+</head>
+<body>
+    <div id="chartContainer" style="width: 100%; height: 360px;"></div>
+    <script src="{% static 'canvasjs.min.js' %}"></script>
+</body>
+</html>                       

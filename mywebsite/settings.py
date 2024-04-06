@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'company',
+    
+    'chartjs',
     'django.contrib.humanize',
     'django_extensions',
 ]

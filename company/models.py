@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+
+
 
 
 
@@ -17,7 +21,15 @@ class Category(models.Model):
     def __str__(self):
         return self.catname
     
-
+class Cart(models.Model):  
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    productid = models.CharField(max_length=100)
+    productidname = models.CharField(max_length=100)
+    price = models.IntegerField()
+    quantity = models.IntegerField()
+    total = models.IntegerField()
+    stamp = models.DateTimeField(auto_now_add=True,blank=True,null=True)
+    
 class AllProduct(models.Model):
     id =  models.CharField(max_length=100,primary_key=True,default='P01')
     catname = models.ForeignKey(Category,on_delete=models.CASCADE,null=True,blank=True)
@@ -52,9 +64,11 @@ class Order(models.Model):
     slip = models.ImageField(upload_to="slip",null=True,blank=True)
     sliptime = models.CharField(max_length=100,null=True,blank=True)
     trackingnumber = models.CharField(max_length=100)
+    order_timestamp = models.DateTimeField(auto_now_add=True, editable=False)
 
     def __str__(self):
         return str(self.orderid)
+
 
 
 class OrderList(models.Model):  
@@ -62,9 +76,13 @@ class OrderList(models.Model):
     productid = models.ForeignKey(AllProduct,on_delete=models.CASCADE,null=True,blank=True)
     quantity = models.IntegerField()
     total = models.IntegerField()
-
+ 
+    def get_revenue(self):
+        return self.quantity * self.productid.price
 
     def __str__(self):
         return str(self.orderid)
+    
+
 
 

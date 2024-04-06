@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .models import *
 from datetime import datetime 
 from django.core.paginator import Paginator
-from jango.models import Sessions
+
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -221,62 +221,58 @@ def Register(request):
     return render(request,'myapp/register.html')   
 
 
-def AddCart(request,pid):
-    #localhost:8000/addtocart/3
-    #{% url 'addtocart-page' pd.id %}
-    
-    if request.user.username  == '':
-           return redirect('register-page')
+def AddCart(request, pid):
+    # Check if the user is not authenticated, then redirect to the register page
+    if not request.user.is_authenticated:
+        return redirect('register-page')
+
     username = request.user.username
     user = User.objects.get(username=username)
-    check =AllProduct.objects.get(id=pid)
-    
+    check = AllProduct.objects.get(id=pid)
 
-
-
-    try:  
-        
-        
-        #กรณีที่สินค้ามีซ้ำให้บวกเพิ่มไปเรื่อยๆ
-        newcart = Sessions.objects.get(user=user,productid=str(pid))
-        newquan = newcart.quantity + 1
-        newcart.quantity = newquan
-        calculate = newcart.price * newquan
-        newcart.total  = calculate
-        newcart.save() 
-
-        #อัพเดตจำนวนสินค้าทั้งหมดล่าสุดในตระกร้า
-        count = Sessions.objects.filter(user=user)
-        count = sum([c.quantity for c in count])
+    try:
+        # Check if the user has a Profile, if not, create one
         updatequan = Profile.objects.get(user=user)
-        updatequan.cartquan =count
+    except Profile.DoesNotExist:
+        updatequan = Profile(user=user)
         updatequan.save()
 
-  
-        return redirect('allproduct-page')
+    try:
+        # Check if the product is already in the cart
+        existing_carts = Cart.objects.filter(user=user, productid=str(pid))
 
+        if existing_carts.exists():
+            # If the product is already in the cart, increment the quantity and update the total
+            newcart = existing_carts.first()
+            newquan = newcart.quantity + 1
+            newcart.quantity = newquan
+            calculate = newcart.price * newquan
+            newcart.total = calculate
+            newcart.save()
 
-    except:
-       
+        else:
+            # If no existing cart record is found, create a new Cart record
+            newcart = Cart()
+            newcart.user = user
+            newcart.productid = pid
+            newcart.productidname = check.name
+            newcart.price = int(check.price)
+            newcart.quantity = 1
+            calculate = int(check.price) * 1
+            newcart.total = calculate
+            newcart.save()
 
-        newcart = Sessions()
-        newcart.user = user
-        newcart.productid= pid
-        newcart.productidname = check.name
-        newcart.price = int(check.price)
-        newcart.quantity = 1 
-        caculate = int(check.price)*1
-        newcart.total = caculate
-        newcart.save()
+    except Cart.DoesNotExist:
+        # Handle the case where the Cart record does not exist (should not happen in this block)
+        pass
 
-        count = Sessions.objects.filter(user=user)
-        count = sum([c.quantity for c in count])
-        updatequan = Profile.objects.get(user=user)
-        updatequan.cartquan = count
-      
-        updatequan.save()
-        return redirect('allproduct-page')
+    # Update the total quantity of items in the cart
+    count = Cart.objects.filter(user=user)
+    count = sum([c.quantity for c in count])
+    updatequan.cartquan = count
+    updatequan.save()
 
+    return redirect('allproduct-page')
 
 def MyCart(request):
     username = request.user.username
@@ -287,17 +283,17 @@ def MyCart(request):
        data = request.POST.copy()
        productid = data.get('productid')
        print('PID',productid)
-       item = Sessions.objects.get(user=user,productid=productid)
+       item = Cart.objects.get(user=user,productid=productid)
        item.delete()
        context['status'] = 'delete'
 
-       count = Sessions.objects.filter(user=user)
+       count = Cart.objects.filter(user=user)
        count = sum([ c.quantity for c in count])
        updatequan = Profile.objects.get(user=user)
        updatequan.cartquan = count
        updatequan.save()
 
-    mycart = Sessions.objects.filter(user=user)
+    mycart = Cart.objects.filter(user=user)
     context['mycart'] = mycart
     count = sum([c.quantity for c in mycart])
     total = sum([c.total for c in mycart])
@@ -319,7 +315,7 @@ def MyCartEdit(request):
     if request.method == 'POST':
        data = request.POST.copy()
        if data.get('clear') == 'clear':  
-           Sessions.objects.filter(user=user).delete()
+           Cart.objects.filter(user=user).delete()
            updatequan = Profile.objects.get(user=user)
            updatequan.cartquan = 0  
            updatequan.save()
@@ -337,13 +333,13 @@ def MyCartEdit(request):
 
 
        for ed in editlist:  
-            edit = Sessions.objects.get(productid=ed[0],user=user)
+            edit = Cart.objects.get(productid=ed[0],user=user)
             edit.quantity = ed[1]
             calculate = edit.price * ed[1]
             edit.total = calculate
             edit.save()    
 
-       count = Sessions.objects.filter(user=user)
+       count = Cart.objects.filter(user=user)
        count = sum([c.quantity for c in count])
        updatequan = Profile.objects.get(user=user)
        updatequan.cartquan = count     
@@ -353,7 +349,7 @@ def MyCartEdit(request):
             
        return redirect('mycart-page')
 
-    mycart = Sessions.objects.filter(user=user)
+    mycart = Cart.objects.filter(user=user)
     context['mycart'] = mycart
 
     return render(request,'myapp/MyCartedit.html',context)
@@ -381,7 +377,7 @@ def Checkout(request):
             context['payment'] = payment
             context['other'] = other
 
-            mycart = Sessions.objects.filter(user=user)
+            mycart = Cart.objects.filter(user=user)
             count = sum(c.quantity for c in mycart)
             total = sum([c.total for c in mycart])
             
@@ -400,7 +396,7 @@ def Checkout(request):
             return render(request,'myapp/checkout2.html',context)
 
         if page == 'confirm':
-            mycart = Sessions.objects.filter(user=user)
+            mycart = Cart.objects.filter(user=user)
             
             mid = str(user.id).zfill(4)
             dt = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -439,7 +435,7 @@ def Checkout(request):
 
                 }
 
-            Sessions.objects.filter(user=user).delete()
+            Cart.objects.filter(user=user).delete()
             updatequan = Profile.objects.get(user=user)
             updatequan.cartquan = 0 
             updatequan.save()
@@ -545,7 +541,7 @@ def AllOrderListPage(request):
 
         od.shipcost = shipcost   
 
-    paginator = Paginator(order,5)
+    paginator = Paginator(order,10)
     page = request.GET.get('page')
     order= paginator.get_page(page)
     context['allorder'] = order 
@@ -798,6 +794,46 @@ def EditProduct(request,productid):
 
 
 
+from django.shortcuts import render
+from django.db.models import Count
+import matplotlib
+matplotlib.use('Agg')  # Use a non-interactive backend (e.g., Agg)
+import matplotlib.pyplot as plt
+
+import io
+import base64
+
+from .models import Order
+
+def monthly_sales_summary(request):
+    if not request.user.is_authenticated or not request.user.profile.usertype == "admin":
+        return redirect('home-page')
+
+    # Fetch monthly sales data
+    monthly_sales = Order.objects.annotate(month=TruncMonth('order_timestamp')).values('month').annotate(count=Count('orderid')).order_by('-month')
+
+    # Extract data for plotting
+    months = [entry['month'].strftime('%B %Y') for entry in monthly_sales]
+    counts = [entry['count'] for entry in monthly_sales]
+
+    # Plotting the graph
+    plt.figure(figsize=(10, 5))
+    plt.bar(months, counts, color='blue')
+    plt.title('Monthly Sales Summary')
+    plt.xlabel('Month')
+    plt.ylabel('Number of Orders')
+
+    # Save the plot to a BytesIO object
+    img_buffer = io.BytesIO()
+    plt.savefig(img_buffer, format='png')
+    plt.close()
+
+    # Convert the BytesIO object to base64 for displaying in HTML
+    img_str = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
+
+    # Pass the data to the template
+    context = {'img_str': img_str}
+    return render(request, 'myapp/sales_summary.html', context)
 
 
 
@@ -806,43 +842,44 @@ def EditProduct(request,productid):
 
 
 
-def TestMD(request):
-    text = '''ลักษณะเชอรี่: กลม ผิวเรียบ สีแดงเข้ม-ดำ เงา
-    #รสชาติ: หวานอมเปรี๊ยว
-    - เนื้อ: นิ่ม-แดง
-    แหล่งที่มา:  ประเทศแคนาดา'''
-    md.markdown(text, extensions=['markdown.extensions.fenced_code'])
-    context = {'text':text}
-    return render(request , 'myapp/testmd.html',context)
 
+# views.py
+from django.shortcuts import render
+from django.db.models import Sum
+import matplotlib.pyplot as plt
+import io
+import base64
 
+from .models import OrderList
+import io
+import base64
+import matplotlib.pyplot as plt
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+from django.shortcuts import render
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+from .models import OrderList, AllProduct
+from django.shortcuts import render
 
+# def monthly_sales(request):
+#   context = [
+#       { "y": 8.58, "label": "Texas" },
+#       { "y": 9.69, "label": "Pennsylvania" },
+#       { "y": 10.35, "label": "Florida" },
+#       { "y": 14.9, "label": "New York" },
+#       { "y": 18.05, "label": "Massachusetts" },
+#       { "y": 18.15, "label": "California" }
+#     ]
+#   return render(request, 'myapp/monthly_sales.html', context)
 
-
-
-
-
-
-
-
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def monthly_sales(request):
+    electricity_price_data = [
+      { "y": 8.58, "label": "Texas" },
+      { "y": 9.69, "label": "Pennsylvania" },
+      { "y": 10.35, "label": "Florida" },
+      { "y": 14.9, "label": "New York" },
+      { "y": 18.05, "label": "Massachusetts" },
+      { "y": 18.15, "label": "California" }
+    ]
+    return render(request, 'myapp/monthly_sales.html', { "electricity_price_data" : electricity_price_data })                        

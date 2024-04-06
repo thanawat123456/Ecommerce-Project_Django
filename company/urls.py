@@ -22,11 +22,12 @@ urlpatterns = [
     path('updatetracking/<str:orderid>/',UpdataTracking,name='updatetracking'),
     path('myorder/<str:orderid>/',MyOrder,name='myorder-page'),
     path('category/<int:code>/',ProductCategory,name='category-page'),
-    path('testmd/',TestMD,name='testmd-page'),
+    # path('testmd/',TestMD,name='testmd-page'),
     path('product/<str:productid>/',ProductDetail,name='detail-page'),
     path('editproduct/<str:productid>/',EditProduct,name='editproduct-page'),
     path('testhome/',Testhome,name = 'test-page'),
-    path('t/',t,name = 'test-page')
-    
+    path('t/',t,name = 'test-page'),
+     path('monthly-sales-summary/', monthly_sales_summary, name='monthly-sales-summary'),
+        path('monthly_sales/', monthly_sales, name='monthly-sales-page'),
 
 ]

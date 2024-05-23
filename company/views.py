@@ -206,11 +206,6 @@ def Register(request):
         newuser.set_password(password)
         newuser.save()
 
-        ####send email fro verify ##### testing
-        sendthai(email,subject,msg)
-
-
-
         profile = Profile()
         profile.user = User.objects.get(username=email)
         profile.save()

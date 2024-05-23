@@ -4,7 +4,7 @@ stages:
 
 variables:
   IMAGE_NAME: "thanawatesso/BenjaUniformApp"
-  IMAGE_TAG: "1.0"
+  IMAGE_TAG: "3.0"
   DEV_SERVER_IP: 13.228.188.81
 
 build-image:
